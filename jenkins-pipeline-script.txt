@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'YOUR_GITHUB_REPOSITORY_URL'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    mkdir -p deployment
+                    cp target/java-lab-1.0.jar deployment/
+                '''
+            }
+        }
+
+        stage('Execute') {
+            steps {
+                sh 'java -jar deployment/java-lab-1.0.jar 5' #copy from the intelliji target/ jar file name
+            }
+        }
+    }
+}
+
